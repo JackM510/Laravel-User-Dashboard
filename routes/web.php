@@ -3,12 +3,18 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Route to dashboard if verified otherwise to login
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+        ? redirect('/dashboard')
+        : redirect('/login');
 });
 
+// Prevent users from routing to dashboard if not verified
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return response()
+    ->view('dashboard')
+    ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

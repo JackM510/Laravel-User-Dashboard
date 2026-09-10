@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Models\Profile;
 
 class RegisteredUserController extends Controller
 {
@@ -40,6 +41,10 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+        Profile::create([
+            'user_id' => $user->id,
+            'theme' => 'light',
         ]);
 
         event(new Registered($user));
